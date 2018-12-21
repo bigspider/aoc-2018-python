@@ -85,7 +85,6 @@ print(len([cell for (x, y), cell in space.items() if cell in "|HLR~" and min_y <
 print(len([cell for cell in space.values() if cell == "~"]))
 
 
-
 # Code to see the computed map, quite fun to watch :)
 #min_x = min(coord[0] for coord in space.keys())
 #max_x = max(coord[0] for coord in space.keys())

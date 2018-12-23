@@ -1,0 +1,50 @@
+# register names: 
+# 0  1 2 3 4 5
+# a ip b c d e
+#ip 1
+
+ 0 seti 123 0 4      # d := 123
+
+ 1 bani 4 456 4      # d := d & 456     ( = 123 & 456 = 72)
+ 2 eqri 4 72 4       # IF d == 72
+ 3 addr 4 1 1        #   JUMP 5 ELSE JUMP 4
+
+ 4 seti 0 0 1        # b := 0
+
+ 5 seti 0 2 4        # d := 0
+
+ 6 bori 4 65536 3    # c := d | 65536
+ 7 seti 10552971 1 4 # d := 10552971
+
+ 8 bani 3 255 5      # e := c & 255           <-- last byte of c
+ 9 addr 4 5 4        # d := e + d
+10 bani 4 16777215 4 # d := d & 16777215      <-- last 3 bytes of d 
+11 muli 4 65899 4    # d := d * 65899
+12 bani 4 16777215 4 # d := d & 16777215      <-- last 3 bytes of d 
+13 gtir 256 3 5      # IF 256 > c
+14 addr 5 1 1        #   JUMP 28 ELSE JUMP 17
+15 addi 1 1 1        # -------
+16 seti 27 7 1       # -------
+
+17 seti 0 1 5        # e := 0
+
+18 addi 5 1 2        # b := e + 1
+19 muli 2 256 2      # b := b * 256     <--- shift left 8 bit
+20 gtrr 2 3 2        # IF b > c
+21 addr 2 1 1        #   THEN JUMP 26 ELSE JUMP 24
+22 addi 1 1 1        # -------
+23 seti 25 0 1       # -------
+
+24 addi 5 1 5        # e := e + 1
+25 seti 17 2 1       # JUMP 18
+
+26 setr 5 7 3        # c := e
+27 seti 7 8 1        # JUMP 8
+
+28 eqrr 4 0 5        # IF d == a
+29 addr 5 1 1        #   EXIT ELSE JUMP 6
+30 seti 5 0 1        # ------
+
+
+cycle  17--27:  find the smallest e such that 256*(e + 1) > c, then set c to this value.
+                But this can be simplified to: c := c >> 8, where >> is right shift operator.

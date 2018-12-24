@@ -1,5 +1,4 @@
 import sys
-from collections import defaultdict
 	
 def can_enter(region_type, equip):
 	return region_type != equip
@@ -62,7 +61,6 @@ inp = sys.stdin.readlines()
 depth = int(inp[0].split()[1])
 width, height = map(int, inp[1].split()[1].split(","))
 target = (width, height)
-
 
 gi = {} # geological index mod 20183
 

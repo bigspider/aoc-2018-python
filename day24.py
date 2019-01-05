@@ -1,6 +1,5 @@
 import sys
 import re
-import time
 
 class Group:
 	def __init__(self, n_units, hit_points, attack_damage, attack_type, initiative, immune_to, weak_to, index=None, camp=None, boost=0):
@@ -101,9 +100,9 @@ def battle(groups, boost=0):
 				n_killed_units = min(attacked.n_alive_units, d // attacked.hit_points)
 				if n_killed_units > 0:
 					stalemate = False
-				#print(f"attacker: {group}")
-				#print(f"defender: {attacked}")
-				#print(f"damage: {d}, defending hit_points {attacked.hit_points}: {n_killed_units} units killed")
+				# print(f"attacker: {group}")
+				# print(f"defender: {attacked}")
+				# print(f"damage: {d}, defending hit_points {attacked.hit_points}: {n_killed_units} units killed")
 				attacked.n_alive_units = attacked.n_alive_units - n_killed_units
 				
 		
@@ -134,20 +133,16 @@ print(sum(g.n_alive_units for g in groups_after))
 min_boost = 1  # if boost < min_boost, immune system loses for sure
 max_boost = None # if boost >= max_boost, immune system wins for sure; None means infinity
 
+# Binary search for the smallest boost that makes the immune system win
 while max_boost is None or min_boost < max_boost:
 	m_boost = 2 * min_boost if max_boost is None else (max_boost + min_boost)//2
-	
-	print(f"trying {m_boost}; [{min_boost}-{max_boost}]")
-	
+		
 	groups_after = battle(all_groups, boost=m_boost)
 	if list(groups_after)[0].camp == 0:
 		max_boost = m_boost  # immune system won
 	else:
 		min_boost = m_boost + 1
-	
-	print(sum(g.n_alive_units for g in groups_after))
 
-print(m_boost)
 groups_after = battle(all_groups, m_boost)
 print(sum(g.n_alive_units for g in groups_after))
 	
